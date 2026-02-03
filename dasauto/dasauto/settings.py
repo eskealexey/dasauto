@@ -98,24 +98,6 @@ DATABASES = {
     }
 }
 
-# База данных PostgreSQL
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'название_базы_данных',
-#         'USER': 'имя_пользователя',
-#         'PASSWORD': 'пароль',
-#         'HOST': 'localhost',  # или IP-адрес сервера
-#         'PORT': '5432',  # стандартный порт PostgreSQL
-#         'OPTIONS': {
-#             'options': '-c search_path=public,other_schema'  # опционально
-#         },
-#         # Для production рекомендуется:
-#         'CONN_MAX_AGE': 600,  # время жизни соединения в секундах
-#         'CONN_HEALTH_CHECKS': True,
-#     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
