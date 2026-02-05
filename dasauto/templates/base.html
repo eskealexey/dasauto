@@ -1,896 +1,121 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoPro | Вход и регистрация</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #0d6efd;
-            --primary-dark: #0b5ed7;
-            --dark-color: #212529;
-            --light-color: #f8f9fa;
-            --border-color: #dee2e6;
-            --success-color: #198754;
-            --error-color: #dc3545;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Описание вашего сайта">
+  <meta name="author" content="Название компании">
+  <title>{% block title %}Das Auto{% endblock %}</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f8f9fa;
-            color: var(--dark-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Шапка */
-        .header {
-            background-color: white;
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 0;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        /* Основная часть с 2 колонками */
-        .main-content {
-            flex: 1;
-            display: flex;
-            padding: 2rem 0;
-        }
-
-        .left-column {
-            width: 20%;
-            padding: 0 2rem;
-            border-right: 1px solid var(--border-color);
-        }
-
-        .center-column {
-            width: 80%;
-            padding: 0 3rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Левая колонка - Приглашение */
-        .welcome-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            margin-bottom: 1.5rem;
-        }
-
-        .welcome-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--dark-color);
-        }
-
-        .welcome-text {
-            color: #6c757d;
-            line-height: 1.5;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 1.5rem;
-        }
-
-        .feature-list li {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
-        }
-
-        .feature-list .icon {
-            color: var(--primary-color);
-            margin-right: 0.5rem;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .contact-info {
-            font-size: 0.85rem;
-            color: #6c757d;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .contact-info p {
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .contact-info .icon {
-            margin-right: 0.5rem;
-            width: 18px;
-            color: var(--primary-color);
-        }
-
-        /* Центральная колонка - Форма */
-        .form-container {
-            width: 100%;
-            max-width: 450px;
-        }
-
-        .form-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        .form-subtitle {
-            color: #6c757d;
-            text-align: center;
-            margin-bottom: 2.5rem;
-            font-size: 1rem;
-        }
-
-        .form-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .form-control {
-            padding: 0.85rem 1rem;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            transition: all 0.2s;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
-        }
-
-        .btn-primary {
-            padding: 0.85rem;
-            font-weight: 500;
-            border-radius: 6px;
-            background-color: var(--primary-color);
-            border: none;
-            width: 100%;
-            margin-top: 0.5rem;
-            font-size: 1rem;
-            transition: background-color 0.2s;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .form-switch {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
-            color: #6c757d;
-            font-size: 0.95rem;
-        }
-
-        .form-switch-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-            margin-left: 0.25rem;
-        }
-
-        /* Сообщения об ошибках и успехе */
-        .alert {
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            display: none;
-        }
-
-        .alert-success {
-            background-color: #d1e7dd;
-            color: var(--success-color);
-            border: 1px solid #badbcc;
-        }
-
-        .alert-error {
-            background-color: #f8d7da;
-            color: var(--error-color);
-            border: 1px solid #f5c2c7;
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.85rem;
-            margin-top: -0.5rem;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .password-strength {
-            margin-top: -0.5rem;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
-        }
-
-        .strength-meter {
-            height: 4px;
-            background-color: #e9ecef;
-            border-radius: 2px;
-            margin-top: 0.25rem;
-            overflow: hidden;
-        }
-
-        .strength-fill {
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s, background-color 0.3s;
-        }
-
-        /* Подвал */
-        .footer {
-            background-color: white;
-            border-top: 1px solid var(--border-color);
-            padding: 1.5rem 0;
-            margin-top: auto;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-
-        .footer-links a {
-            color: #6c757d;
-            text-decoration: none;
-            margin-left: 1.5rem;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-color);
-        }
-
-        /* Адаптивность */
-        @media (max-width: 992px) {
-            .main-content {
-                flex-direction: column;
-            }
-
-            .left-column,
-            .center-column {
-                width: 100%;
-                padding: 0 1.5rem;
-                border: none;
-                margin-bottom: 2rem;
-            }
-
-            .left-column {
-                padding: 0 2rem;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-links {
-                margin-top: 1rem;
-            }
-
-            .footer-links a {
-                margin: 0 0.75rem;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .left-column {
-                width: 20%;
-            }
-
-            .center-column {
-                width: 80%;
-            }
-        }
-    </style>
+  <!-- Favicon -->
+  <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+   {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Шапка -->
-    <header class="header">
-        <div class="container">
-            <a href="#" class="logo">AutoPro</a>
+
+  <!-- Шапка с логотипом -->
+  <header class="header">
+    <div class="container">
+      <div class="d-flex align-items-center">
+        <img src="{% static 'img/logoauto.jpeg' %}" alt="Логотип автомастерская" class="logo me-3" />
+        <h1 class="h3 mb-0 text-dark">Автомастерская</h1>
+      </div>
+    </div>
+  </header>
+
+  <!-- Горизонтальное меню под шапкой -->
+  <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm main-nav">
+    <div class="container">
+      <!-- Кнопка меню на мобильных -->
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#mainNavbar"
+              aria-controls="mainNavbar"
+              aria-expanded="false"
+              aria-label="Переключить меню">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Логотип/название меню (необязательно) -->
+      <a class="navbar-brand d-md-none" href="#">Меню</a>
+
+      <!-- Пункты меню -->
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+               href="{% url 'home' %}">Главная</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+               href="#">О нас</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}"
+               href="#">Услуги</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+               href="#">Контакты</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Основное содержимое -->
+  <main class="main-content">
+    <div class="container">
+      <div class="row g-3">
+        <!-- Левая колонка: 20% -->
+        <div class="col-12 col-left-fixed">
+          <div class="bg-light rounded p-3 h-100 h-100-inner">
+            <h5 class="mb-3">Категории</h5>
+            <nav class="nav flex-column" aria-label="Боковое меню">
+              <a class="nav-link active" aria-current="page" href="#">Все товары</a>
+              <a class="nav-link" href="#">Электроника</a>
+              <a class="nav-link" href="#">Одежда</a>
+              <a class="nav-link" href="#">Аксессуары</a>
+            </nav>
+          </div>
         </div>
-    </header>
 
-    <!-- Основной контент (2 колонки) -->
-    <main class="main-content">
-        <!-- Левая колонка (20%) -->
-        <div class="left-column">
-            <div class="welcome-card">
-                <h2 class="welcome-title">AutoPro</h2>
-                <p class="welcome-text">
-                    Профессиональный сервис для вашего автомобиля. Более 10 лет на рынке авторемонта.
-                </p>
-
-                <ul class="feature-list">
-                    <li>
-                        <span class="icon">✓</span>
-                        <span>Качественный ремонт с гарантией</span>
-                    </li>
-                    <li>
-                        <span class="icon">✓</span>
-                        <span>Оригинальные запчасти</span>
-                    </li>
-                    <li>
-                        <span class="icon">✓</span>
-                        <span>Современное оборудование</span>
-                    </li>
-                    <li>
-                        <span class="icon">✓</span>
-                        <span>Прозрачные цены</span>
-                    </li>
-                    <li>
-                        <span class="icon">✓</span>
-                        <span>Выездной ремонт</span>
-                    </li>
-                </ul>
-
-                <div class="contact-info">
-                    <p>
-                        <span class="icon">📍</span>
-                        <span>г. Москва, ул. Автомобильная, 15</span>
-                    </p>
-                    <p>
-                        <span class="icon">📞</span>
-                        <span>+7 (495) 123-45-67</span>
-                    </p>
-                    <p>
-                        <span class="icon">✉️</span>
-                        <span>info@autopro.ru</span>
-                    </p>
-                </div>
-            </div>
+        <!-- Правая колонка: 80% -->
+        <div class="col-12 col-right-flex">
+          <div class="bg-white rounded shadow-sm p-4 h-100 h-100-inner">
+            {% block content %}
+              <h2 class="h4">Добро пожаловать!</h2>
+              <p>Это основное содержимое сайта. Здесь будет ваш текст, статьи, формы или каталог.</p>
+              <p>Левая колонка занимает ровно 20%, правая — оставшиеся 80%.</p>
+              <a href="#" class="btn btn-primary">Подробнее</a>
+            {% endblock %}
+          </div>
         </div>
-
-        <!-- Центральная колонка (80%) -->
-        <div class="center-column">
-            <div class="form-container">
-                <h2 class="form-title" id="formTitle">Вход в личный кабинет</h2>
-                <p class="form-subtitle" id="formSubtitle">Для доступа к истории заказов и записи на обслуживание</p>
-
-                <!-- Сообщения -->
-                <div class="alert alert-success" id="successMessage"></div>
-                <div class="alert alert-error" id="errorMessage"></div>
-
-                <!-- Форма входа -->
-                <div id="loginForm">
-                    <div class="form-card">
-                        <form id="loginFormElement">
-                            <input type="email" class="form-control" id="loginEmail" placeholder="Электронная почта" required>
-                            <div class="error-message" id="loginEmailError">Введите корректный email</div>
-
-                            <input type="password" class="form-control" id="loginPassword" placeholder="Пароль" required>
-                            <div class="error-message" id="loginPasswordError">Пароль должен содержать минимум 6 символов</div>
-
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-                                <div style="display: flex; align-items: center;">
-                                    <input type="checkbox" id="rememberLogin" style="margin-right: 0.5rem;">
-                                    <label for="rememberLogin" style="font-size: 0.9rem;">Запомнить меня</label>
-                                </div>
-                                <a href="#" id="forgotPassword" style="font-size: 0.9rem; color: var(--primary-color); text-decoration: none;">Забыли пароль?</a>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary" id="loginButton">Войти</button>
-                        </form>
-
-                        <div class="form-switch">
-                            Нет аккаунта?
-                            <a class="form-switch-link" onclick="showRegisterForm()">Зарегистрироваться</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Форма регистрации (скрыта) -->
-                <div id="registerForm" style="display: none;">
-                    <div class="form-card">
-                        <form id="registerFormElement">
-                            <input type="text" class="form-control" id="registerName" placeholder="ФИО" required>
-                            <div class="error-message" id="registerNameError">Введите корректное ФИО (минимум 2 слова)</div>
-
-                            <input type="email" class="form-control" id="registerEmail" placeholder="Электронная почта" required>
-                            <div class="error-message" id="registerEmailError">Введите корректный email</div>
-
-                            <input type="tel" class="form-control" id="registerPhone" placeholder="Телефон" required>
-                            <div class="error-message" id="registerPhoneError">Введите корректный номер телефона</div>
-
-                            <input type="password" class="form-control" id="registerPassword" placeholder="Пароль" required>
-                            <div class="password-strength">
-                                <div>Надежность пароля: <span id="passwordStrengthText">слабый</span></div>
-                                <div class="strength-meter">
-                                    <div class="strength-fill" id="passwordStrengthBar"></div>
-                                </div>
-                            </div>
-                            <div class="error-message" id="registerPasswordError">Пароль должен содержать минимум 8 символов, включая буквы и цифры</div>
-
-                            <input type="password" class="form-control" id="registerPasswordConfirm" placeholder="Подтверждение пароля" required>
-                            <div class="error-message" id="registerPasswordConfirmError">Пароли не совпадают</div>
-
-                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                                <input type="checkbox" id="agreeTerms" style="margin-right: 0.5rem;" required>
-                                <label for="agreeTerms" style="font-size: 0.9rem;">Согласен с <a href="#" style="color: var(--primary-color);">условиями использования</a></label>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary" id="registerButton">Зарегистрироваться</button>
-                        </form>
-
-                        <div class="form-switch">
-                            Уже есть аккаунт?
-                            <a class="form-switch-link" onclick="showLoginForm()">Войти</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Подвал -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="copyright">
-                    © 2023 AutoPro. Все права защищены.
-                </div>
-                <div class="footer-links">
-                    <a href="#">Политика конфиденциальности</a>
-                    <a href="#">Условия использования</a>
-                    <a href="#">Контакты</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И УТИЛИТЫ ==========
-
-        // Эмуляция базы данных пользователей (в реальном проекте будет API)
-        const usersDB = JSON.parse(localStorage.getItem('autopro_users')) || [
-            // Тестовый пользователь для демонстрации
-            {
-                id: 1,
-                name: "Иванов Иван",
-                email: "demo@example.com",
-                phone: "+7 (999) 123-45-67",
-                password: "Demo123!", // В реальном проекте пароли должны быть хешированы
-                createdAt: "2023-01-15"
-            }
-        ];
-
-        // Сохранение пользователей в localStorage
-        function saveUsersToStorage() {
-            localStorage.setItem('autopro_users', JSON.stringify(usersDB));
-        }
-
-        // Сохранение текущего пользователя в сессии
-        function setCurrentUser(user) {
-            sessionStorage.setItem('autopro_current_user', JSON.stringify(user));
-        }
-
-        // Получение текущего пользователя
-        function getCurrentUser() {
-            return JSON.parse(sessionStorage.getItem('autopro_current_user'));
-        }
-
-        // Проверка авторизации
-        function isAuthenticated() {
-            return getCurrentUser() !== null;
-        }
-
-        // Показать/скрыть сообщения
-        function showMessage(elementId, message, isError = false) {
-            const element = document.getElementById(elementId);
-            element.textContent = message;
-            element.className = isError ? 'alert alert-error' : 'alert alert-success';
-            element.style.display = 'block';
-
-            // Автоматически скрыть через 5 секунд
-            setTimeout(() => {
-                element.style.display = 'none';
-            }, 5000);
-        }
-
-        // Показать/скрыть ошибку поля
-        function showFieldError(elementId, message) {
-            const element = document.getElementById(elementId);
-            element.textContent = message;
-            element.style.display = 'block';
-        }
-
-        function hideFieldError(elementId) {
-            document.getElementById(elementId).style.display = 'none';
-        }
-
-        // Валидация email
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        // Валидация телефона
-        function validatePhone(phone) {
-            const re = /^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/;
-            return re.test(phone);
-        }
-
-        // Валидация пароля
-        function validatePassword(password) {
-            // Минимум 8 символов, буквы и цифры
-            const re = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
-            return re.test(password);
-        }
-
-        // Проверка надежности пароля
-        function checkPasswordStrength(password) {
-            let strength = 0;
-
-            if (password.length >= 8) strength++;
-            if (/[a-z]/.test(password)) strength++;
-            if (/[A-Z]/.test(password)) strength++;
-            if (/\d/.test(password)) strength++;
-            if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-            return strength;
-        }
-
-        // Обновление индикатора надежности пароля
-        function updatePasswordStrength(password) {
-            const strength = checkPasswordStrength(password);
-            const strengthBar = document.getElementById('passwordStrengthBar');
-            const strengthText = document.getElementById('passwordStrengthText');
-
-            let width = 0;
-            let color = '#dc3545'; // красный
-            let text = 'слабый';
-
-            if (strength === 0) {
-                width = 0;
-            } else if (strength <= 2) {
-                width = 33;
-                text = 'слабый';
-            } else if (strength === 3) {
-                width = 66;
-                color = '#ffc107'; // желтый
-                text = 'средний';
-            } else {
-                width = 100;
-                color = '#198754'; // зеленый
-                text = 'сильный';
-            }
-
-            strengthBar.style.width = width + '%';
-            strengthBar.style.backgroundColor = color;
-            strengthText.textContent = text;
-        }
-
-        // ========== ФУНКЦИИ ДЛЯ ФОРМ ==========
-
-        // Переключение между формами входа и регистрации
-        function showRegisterForm() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('formTitle').textContent = 'Регистрация';
-            document.getElementById('formSubtitle').textContent = 'Создайте аккаунт для доступа ко всем услугам';
-
-            // Сброс сообщений
-            document.getElementById('successMessage').style.display = 'none';
-            document.getElementById('errorMessage').style.display = 'none';
-
-            // Сброс ошибок полей
-            ['registerNameError', 'registerEmailError', 'registerPhoneError', 'registerPasswordError', 'registerPasswordConfirmError']
-                .forEach(id => hideFieldError(id));
-        }
-
-        function showLoginForm() {
-            document.getElementById('registerForm').style.display = 'none';
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('formTitle').textContent = 'Вход в личный кабинет';
-            document.getElementById('formSubtitle').textContent = 'Для доступа к истории заказов и записи на обслуживание';
-
-            // Сброс сообщений
-            document.getElementById('successMessage').style.display = 'none';
-            document.getElementById('errorMessage').style.display = 'none';
-
-            // Сброс ошибок полей
-            ['loginEmailError', 'loginPasswordError'].forEach(id => hideFieldError(id));
-        }
-
-        // ========== ОБРАБОТКА ФОРМЫ РЕГИСТРАЦИИ ==========
-        document.getElementById('registerFormElement').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Получение данных формы
-            const name = document.getElementById('registerName').value.trim();
-            const email = document.getElementById('registerEmail').value.trim();
-            const phone = document.getElementById('registerPhone').value;
-            const password = document.getElementById('registerPassword').value;
-            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
-            const agreeTerms = document.getElementById('agreeTerms').checked;
-
-            // Сброс предыдущих ошибок
-            ['registerNameError', 'registerEmailError', 'registerPhoneError', 'registerPasswordError', 'registerPasswordConfirmError']
-                .forEach(id => hideFieldError(id));
-
-            let hasError = false;
-
-            // Валидация имени
-            if (name.split(' ').length < 2) {
-                showFieldError('registerNameError', 'Введите имя и фамилию');
-                hasError = true;
-            }
-
-            // Валидация email
-            if (!validateEmail(email)) {
-                showFieldError('registerEmailError', 'Введите корректный email');
-                hasError = true;
-            }
-
-            // Проверка на существующий email
-            const existingUser = usersDB.find(user => user.email === email);
-            if (existingUser) {
-                showFieldError('registerEmailError', 'Пользователь с таким email уже зарегистрирован');
-                hasError = true;
-            }
-
-            // Валидация телефона
-            if (!validatePhone(phone)) {
-                showFieldError('registerPhoneError', 'Введите телефон в формате +7 (XXX) XXX-XX-XX');
-                hasError = true;
-            }
-
-            // Валидация пароля
-            if (!validatePassword(password)) {
-                showFieldError('registerPasswordError', 'Пароль должен содержать минимум 8 символов, включая буквы и цифры');
-                hasError = true;
-            }
-
-            // Проверка совпадения паролей
-            if (password !== passwordConfirm) {
-                showFieldError('registerPasswordConfirmError', 'Пароли не совпадают');
-                hasError = true;
-            }
-
-            // Проверка согласия с условиями
-            if (!agreeTerms) {
-                showMessage('errorMessage', 'Необходимо согласиться с условиями использования', true);
-                hasError = true;
-            }
-
-            // Если есть ошибки - прерываем
-            if (hasError) {
-                return;
-            }
-
-            // Имитация загрузки
-            const registerButton = document.getElementById('registerButton');
-            const originalText = registerButton.textContent;
-            registerButton.textContent = 'Регистрация...';
-            registerButton.disabled = true;
-
-            try {
-                // Имитация запроса к серверу
-                await new Promise(resolve => setTimeout(resolve, 1500));
-
-                // Создание нового пользователя
-                const newUser = {
-                    id: usersDB.length + 1,
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    password: password, // В реальном проекте здесь должно быть хеширование
-                    createdAt: new Date().toISOString().split('T')[0]
-                };
-
-                // Сохранение пользователя
-                usersDB.push(newUser);
-                saveUsersToStorage();
-
-                // Автоматический вход после регистрации
-                setCurrentUser(newUser);
-
-                // Показ успешного сообщения
-                showMessage('successMessage', `Регистрация успешна! Добро пожаловать, ${name.split(' ')[0]}!`);
-
-                // Перенаправление через 2 секунды
-                setTimeout(() => {
-                    window.location.href = '/dashboard.html'; // Замените на реальный URL
-                }, 2000);
-
-            } catch (error) {
-                showMessage('errorMessage', 'Ошибка регистрации. Попробуйте позже.', true);
-            } finally {
-                // Восстановление кнопки
-                registerButton.textContent = originalText;
-                registerButton.disabled = false;
-            }
-        });
-
-        // ========== ОБРАБОТКА ФОРМЫ ВХОДА ==========
-        document.getElementById('loginFormElement').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Получение данных формы
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const rememberMe = document.getElementById('rememberLogin').checked;
-
-            // Сброс предыдущих ошибок
-            ['loginEmailError', 'loginPasswordError'].forEach(id => hideFieldError(id));
-
-            let hasError = false;
-
-            // Валидация email
-            if (!validateEmail(email)) {
-                showFieldError('loginEmailError', 'Введите корректный email');
-                hasError = true;
-            }
-
-            // Валидация пароля
-            if (password.length < 6) {
-                showFieldError('loginPasswordError', 'Пароль должен содержать минимум 6 символов');
-                hasError = true;
-            }
-
-            if (hasError) return;
-
-            // Имитация загрузки
-            const loginButton = document.getElementById('loginButton');
-            const originalText = loginButton.textContent;
-            loginButton.textContent = 'Вход...';
-            loginButton.disabled = true;
-
-            try {
-                // Имитация запроса к серверу
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                // Поиск пользователя
-                const user = usersDB.find(u => u.email === email && u.password === password);
-
-                if (!user) {
-                    showMessage('errorMessage', 'Неверный email или пароль', true);
-                    return;
-                }
-
-                // Сохранение пользователя в сессии
-                setCurrentUser(user);
-
-                // Сохранение в localStorage для "запомнить меня"
-                if (rememberMe) {
-                    localStorage.setItem('autopro_remember_email', email);
-                } else {
-                    localStorage.removeItem('autopro_remember_email');
-                }
-
-                // Показ успешного сообщения
-                showMessage('successMessage', `Вход выполнен! Добро пожаловать, ${user.name.split(' ')[0]}!`);
-
-                // Перенаправление через 1.5 секунды
-                setTimeout(() => {
-                    window.location.href = '/dashboard.html'; // Замените на реальный URL
-                }, 1500);
-
-            } catch (error) {
-                showMessage('errorMessage', 'Ошибка входа. Попробуйте позже.', true);
-            } finally {
-                // Восстановление кнопки
-                loginButton.textContent = originalText;
-                loginButton.disabled = false;
-            }
-        });
-
-        // ========== ВОССТАНОВЛЕНИЕ ПАРОЛЯ ==========
-        document.getElementById('forgotPassword').addEventListener('click', function(e) {
-            e.preventDefault();
-
-            const email = prompt('Введите ваш email для восстановления пароля:');
-
-            if (email && validateEmail(email)) {
-                // Проверка существования пользователя
-                const userExists = usersDB.some(user => user.email === email);
-
-                if (userExists) {
-                    alert(`Инструкция по восстановлению пароля отправлена на ${email}`);
-                    // В реальном проекте здесь был бы запрос к API
-                } else {
-                    alert('Пользователь с таким email не найден');
-                }
-            } else if (email) {
-                alert('Введите корректный email');
-            }
-        });
-
-        // ========== ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ ВАЛИДАЦИИ В РЕАЛЬНОМ ВРЕМЕНИ ==========
-
-        // Отслеживание ввода пароля для регистрации
-        document.getElementById('registerPassword').addEventListener('input', function(e) {
-            updatePasswordStrength(e.target.value);
-            hideFieldError('registerPasswordError');
-        });
-
-        // Отслеживание ввода подтверждения пароля
-        document.getElementById('registerPasswordConfirm').addEventListener('input', function() {
-            const password = document.getElementById('registerPassword').value;
-            const confirm = document.getElementById('registerPasswordConfirm').value;
-
-            if (password && confirm && password !== confirm) {
-                showFieldError('registerPasswordConfirmError', 'Пароли не совпадают');
-            } else {
-                hideFieldError('registerPasswordConfirmError');
-            }
-        });
-
-        // Маска для телефона
-        document.getElementById('registerPhone').addEventListener('input', function(e) {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-            e.target.value = '+7' + (x[2] ? ' (' + x[2] : '') + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
-            hideFieldError('registerPhoneError');
-        });
-
-        // Валидация email при вводе
-        document.getElementById('registerEmail').addEventListener('blur', function() {
-            const email = this.value.trim();
-            if (email && !validateEmail(email)) {
-                showFieldError('registerEmailError', 'Введите корректный email');
-            } else {
-                hideFieldError('registerEmailError');
-            }
-        });
-
-        // Загрузка сохраненного email при "запомнить меня"
-        window.addEventListener('load', function() {
-            const savedEmail = localStorage.getItem('autopro_remember_email');
-            if (savedEmail) {
-                document.getElementById('loginEmail').value = savedEmail;
-                document.getElementById('rememberLogin').checked = true;
-            }
-
-            // Проверка авторизации
-            if (isAuthenticated()) {
-                const user = getCurrentUser();
-                alert(`Вы уже вошли как ${user.name}. Перенаправление в личный кабинет...`);
-                // window.location.href = '/dashboard.html';
-            }
-        });
-    </script>
+      </div>
+    </div>
+  </main>
+
+  <!-- Подвал -->
+  <footer class="footer">
+    <div class="container">
+      <p class="mb-0">&copy; <span id="currentYear"></span> Название сайта. Все права защищены.</p>
+      <p class="small mt-2 opacity-75">Контакты: example@email.com | +7 (XXX) XXX-XX-XX</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Год в подвале -->
+  <script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+  </script>
+
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
