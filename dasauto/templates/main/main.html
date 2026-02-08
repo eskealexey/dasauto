@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 
+{% block title %}Главная страница{% endblock %}
+
 {% block content %}
-
-
+<h1>Добро пожаловать!</h1>
+<div class="links">
+    {% if user.is_authenticated %}
+        <p>Вы вошли как: <strong>{{ user.username }}</strong></p>
+        <a href="{% url 'profile' %}" class="btn">Профиль</a>
+        <div style="margin-top: 10px;">
+            <a href="{% url 'logout' %}" class="btn" style="background: #6c757d;">Выйти</a>
+        </div>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn">Войти</a>
+        <div style="margin-top: 10px;">
+            <a href="{% url 'register' %}" class="btn" style="background: #28a745;">Зарегистрироваться</a>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,47 +1,57 @@
-# forms.py
+# accounts/forms.py
+
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
-class RegisterForm(forms.Form):
-    username = forms.CharField(
-        max_length=150,
-        min_length=3,
-        label='Имя пользователя',
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
+class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
-        label='Email',
-        validators=[validate_email],
-        widget=forms.EmailInput(attrs={'class': 'form-control'})
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите email'
+        })
     )
-    password = forms.CharField(
-        label='Пароль',
-        min_length=6,
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите имя пользователя'
+        })
     )
-    password_confirm = forms.CharField(
-        label='Подтвердите пароль',
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите пароль'
+        })
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Повторите пароль'
+        })
     )
 
-    def clean_username(self):
-        username = self.cleaned_data.get('username')
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('Пользователь с таким именем уже существует.')
-        return username
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError('Пользователь с таким email уже зарегистрирован.')
+            raise ValidationError('Пользователь с таким email уже существует')
         return email
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        password_confirm = cleaned_data.get('password_confirm')
-
-        if password != password_confirm:
-            raise forms.ValidationError('Пароли не совпадают.')
-        return cleaned_data
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите имя пользователя или email'
+        })
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите пароль'
+        })
+    )

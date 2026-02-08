@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts',
     'main',
+    'accounts',  # Наше приложение
 ]
 
 MIDDLEWARE = [
@@ -73,16 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'dasauto.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-#
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 # База данных MySQL
 DATABASES = {
@@ -141,3 +131,10 @@ STATICFILES_DIRS = [
 ]
 # Для production
 # STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Настройки аутентификации
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = 'home'

@@ -1,0 +1,21 @@
+<!-- templates/accounts/profile.html -->
+{% extends 'base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<h1>Профиль пользователя</h1>
+<div class="user-info">
+    <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Дата регистрации:</strong> {{ user.date_joined|date:"d.m.Y H:i" }}</p>
+    <p><strong>Последний вход:</strong> {{ user.last_login|date:"d.m.Y H:i" }}</p>
+</div>
+
+<div class="links" style="margin-top: 30px;">
+    <a href="{% url 'home' %}" class="btn">На главную</a>
+    <div style="margin-top: 10px;">
+        <a href="{% url 'logout' %}" class="btn" style="background: #dc3545;">Выйти</a>
+    </div>
+</div>
+{% endblock %}
