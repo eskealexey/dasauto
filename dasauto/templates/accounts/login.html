@@ -4,39 +4,68 @@
 {% block title %}Вход{% endblock %}
 
 {% block content %}
-<h1>Вход в систему</h1>
-<form method="post">
-    {% csrf_token %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm mt-5">
+                <div class="card-body p-4">
+                    <h1 class="card-title text-center mb-4">Вход в систему</h1>
 
-    <div class="form-group">
-        {{ form.username }}
-        {% if form.username.errors %}
-        <div class="errors">
-            {{ form.username.errors }}
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Поле имени пользователя -->
+                        <div class="mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">
+                                Имя пользователя
+                            </label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.username.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Поле пароля -->
+                        <div class="mb-4">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">
+                                Пароль
+                            </label>
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.password.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Ошибки формы -->
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+
+                        <!-- Кнопка отправки -->
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Войти</button>
+                        </div>
+                    </form>
+
+                    <!-- Ссылки -->
+                    <div class="text-center">
+                        <p class="mb-2">
+                            Нет аккаунта?
+                            <a href="{% url 'register' %}" class="text-decoration-none">Зарегистрироваться</a>
+                        </p>
+                        <p class="mb-0">
+                            <a href="{% url 'home' %}" class="text-decoration-none">На главную</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endif %}
     </div>
-
-    <div class="form-group">
-        {{ form.password }}
-        {% if form.password.errors %}
-        <div class="errors">
-            {{ form.password.errors }}
-        </div>
-        {% endif %}
-    </div>
-
-    {% if form.non_field_errors %}
-    <div class="errors">
-        {{ form.non_field_errors }}
-    </div>
-    {% endif %}
-
-    <button type="submit" class="btn">Войти</button>
-</form>
-
-<div class="links">
-    <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
-    <p><a href="{% url 'home' %}">На главную</a></p>
 </div>
 {% endblock %}

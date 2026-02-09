@@ -3,19 +3,70 @@
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
-<h1>Добро пожаловать!</h1>
-<div class="links">
-    {% if user.is_authenticated %}
-        <p>Вы вошли как: <strong>{{ user.username }}</strong></p>
-        <a href="{% url 'profile' %}" class="btn">Профиль</a>
-        <div style="margin-top: 10px;">
-            <a href="{% url 'logout' %}" class="btn" style="background: #6c757d;">Выйти</a>
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-75">
+        <div class="col-md-8 col-lg-6 text-center">
+            <!-- Главный заголовок -->
+            <div class="mb-5">
+                <h1 class="display-5 fw-bold mb-4">Добро пожаловать!</h1>
+
+                {% if user.is_authenticated %}
+                    <div class="alert alert-success" role="alert">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-check fs-4 me-3"></i>
+                            <div class="text-start">
+                                <h5 class="alert-heading mb-1">Вы авторизованы</h5>
+                                <p class="mb-0">Приветствуем, <strong>{{ user.username }}</strong>!</p>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="lead text-muted mb-4">
+                        Для доступа ко всем возможностям системы выполните вход или зарегистрируйтесь
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Основные кнопки -->
+            <div class="d-grid gap-3 d-md-block">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="btn btn-primary btn-lg me-md-3 mb-3">
+                        <i class="bi bi-person me-2"></i>Мой профиль
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-lg mb-3">
+                        <i class="bi bi-box-arrow-right me-2"></i>Выйти
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-md-3 mb-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Войти
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn-success btn-lg mb-3">
+                        <i class="bi bi-person-plus me-2"></i>Регистрация
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- Дополнительная навигация -->
+            <div class="mt-5 pt-4 border-top">
+                <h5 class="mb-3">Быстрая навигация</h5>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <a href="{% url 'home' %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-house me-1"></i>Главная
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-gear me-1"></i>Настройки
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-question-circle me-1"></i>Помощь
+                        </a>
+                    {% endif %}
+                    <a href="#" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-info-circle me-1"></i>О системе
+                    </a>
+                </div>
+            </div>
         </div>
-    {% else %}
-        <a href="{% url 'login' %}" class="btn">Войти</a>
-        <div style="margin-top: 10px;">
-            <a href="{% url 'register' %}" class="btn" style="background: #28a745;">Зарегистрироваться</a>
-        </div>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}
