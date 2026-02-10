@@ -2,11 +2,13 @@
 # accounts/views.py
 
 from django.contrib import messages
-from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
+from django.contrib.auth import get_user_model, login, authenticate
+from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 
+User = get_user_model()  # Это вернет вашу CustomUser
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, ProfileUpdateForm
 
 
