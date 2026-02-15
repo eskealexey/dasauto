@@ -36,8 +36,8 @@
             <!-- Основные кнопки -->
             <div class="d-grid gap-3 d-md-block">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" class="btn btn-primary btn-lg me-md-3 mb-3">
-                        <i class="bi bi-person me-2"></i>Мой профиль
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg me-md-3 mb-3">
+                        <i class="bi bi-person me-2"></i>Мой журнал
                     </a>
                     <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-lg mb-3">
                         <i class="bi bi-box-arrow-right me-2"></i>Выйти
