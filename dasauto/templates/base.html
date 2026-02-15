@@ -40,60 +40,108 @@
   <!-- Горизонтальное меню под шапкой -->
   <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm main-nav">
     <div class="container">
-      <!-- Кнопка меню на мобильных -->
-      <button class="navbar-toggler" type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#mainNavbar"
-              aria-controls="mainNavbar"
-              aria-expanded="false"
-              aria-label="Переключить меню">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        <!-- Кнопка меню на мобильных -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
+                aria-label="Переключить меню">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <!-- Логотип/название меню (необязательно) -->
-      <a class="navbar-brand d-md-none" href="#">Меню</a>
+        <!-- Логотип/название (видно на мобильных) -->
+        <a class="navbar-brand d-md-none" href="#">Меню</a>
 
-      <!-- Пункты меню -->
-      <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
-               href="{% url 'home' %}">Главная</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
-               href="#">О нас</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}"
-               href="#">Услуги</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
-               href="#">Контакты</a>
-          </li>
-        </ul>
-      </div>
+        <!-- Меню и кнопки -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <!-- Левая часть - меню -->
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                       href="{% url 'home' %}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+                       href="#">О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}"
+                       href="#">Услуги</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+                       href="#">Контакты</a>
+                </li>
+            </ul>
+
+            <!-- Правая часть - кнопки входа и регистрации -->
+             {% if user.is_authenticated %}
+            <div class="d-flex">
+                <a href="{% url 'profile' %}"
+                   class="text-decoration-none d-inline-flex align-items-center gap-2 py-1 px-3
+                          rounded-3 fw-semibold text-primary border border-primary-subtle"
+                   style="font-size: 0.95rem; background-color: #eef7ff; transition: all 0.2s ease-in-out;">
+                  <span class="d-flex align-items-center justify-content-center
+                                rounded-circle bg-primary text-white"
+                        style="width: 24px; height: 24px; font-size: 0.8rem;">
+                    {% if user.first_name %}
+                      {{ user.first_name|first|upper }}
+                    {% else %}
+                      {{ user.username|first|upper }}
+                    {% endif %}
+                  </span>
+                  <span>
+                    {% if user.first_name %}
+                      {{ user.first_name }}
+                    {% else %}
+                      {{ user.username }}
+                    {% endif %}
+                  </span>
+                </a>
+                  &nbsp;&nbsp;
+                <a href="{% url 'logout' %}" class="btn btn-primary">Выход</a>
+            </div>
+
+            {% else %}
+            <div class="d-flex">
+                <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Войти</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">Регистрация</a>
+            </div>
+            {% endif %}
+
+        </div>
     </div>
-  </nav>
+</nav>
 
   <!-- Основное содержимое -->
   <main class="main-content">
     <div class="container">
       <div class="row g-3">
         <!-- Левая колонка: 20% -->
-        <div class="col-12 col-left-fixed">
-          <div class="bg-light rounded p-3 h-100 h-100-inner">
-            <h5 class="mb-3">Категории</h5>
-            <nav class="nav flex-column" aria-label="Боковое меню">
-              <a class="nav-link active" aria-current="page" href="#">Все услуги</a>
-              <a class="nav-link" href="#">ТО</a>
-              <a class="nav-link" href="#">Ремонт</a>
-              <a class="nav-link" href="#">Запчасти</a>
-            </nav>
-          </div>
-        </div>
+          <!-- Боковое меню -->
+          {% if user.is_authenticated %}
+            <div class="col-12 col-left-fixed">
+              <div class="bg-light rounded p-3 h-100 h-100-inner">
+                <h5 class="mb-3">Категории</h5>
+                <nav class="nav flex-column" aria-label="Боковое меню">
+                  <a class="nav-link active" aria-current="page" href="#">Все услуги</a>
+                  <a class="nav-link" href="#">ТО</a>
+                  <a class="nav-link" href="#">Ремонт</a>
+                  <a class="nav-link" href="#">Запчасти</a>
+                </nav>
+              </div>
+            </div>
+          {% else %}
+            <div class="col-12 col-left-fixed">
+              <div class="bg-light rounded p-3 h-100 h-100-inner">
+                <h5 class="mb-3">&nbsp;</h5>
+                <nav class="nav flex-column" aria-label="Боковое меню">
 
+                </nav>
+              </div>
+            </div>
+          {% endif %}
         <!-- Правая колонка: 80% -->
         <div class="col-12 col-right-flex">
           <div class="bg-white rounded shadow-sm p-4 h-100 h-100-inner">

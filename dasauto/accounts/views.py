@@ -36,7 +36,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f'Добро пожаловать, {username}!')
-                return redirect('profile')
+                return redirect('home')
     else:
         form = CustomAuthenticationForm()
 

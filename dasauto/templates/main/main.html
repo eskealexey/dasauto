@@ -16,7 +16,13 @@
                             <i class="bi bi-person-check fs-4 me-3"></i>
                             <div class="text-start">
                                 <h5 class="alert-heading mb-1">Вы авторизованы</h5>
-                                <p class="mb-0">Приветствуем, <strong>{{ user.username }}</strong>!</p>
+                                <p class="mb-0">Приветствуем, <strong>
+                                    {% if user.first_name %}
+                                        {{ user.first_name }}
+                                    {% else %}
+                                        {{ user.username }}
+                                    {% endif %}
+                                </strong>!</p>
                             </div>
                         </div>
                     </div>

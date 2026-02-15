@@ -63,3 +63,22 @@
         max-width: 78%;
       }
     }
+    @media (max-width: 767px) {
+    .navbar .d-flex {
+        margin-top: 10px;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .navbar .btn {
+        flex: 1;
+        text-align: center;
+    }
+}
+ /* Плавное подчёркивание при наведении */
+  a.text-primary:hover {
+    text-decoration: none;
+    background-color: #dbedff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.15);
+  }
