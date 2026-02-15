@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load client_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-user"></i>
+            {{ client.full_name }}
+            {% if not client.is_active %}
+            <span class="badge bg-secondary">Неактивен</span>
+            {% endif %}
+        </h1>
+        <div>
+            <a href="{% url 'client_list' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Назад
+            </a>
+            <a href="#" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Редактировать
+            </a>
+        </div>
+    </div>
+
+    <!-- Информация о клиенте -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Контактная информация</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Телефон:</strong>
+                        <a href="tel:{{ client.phone }}">{{ client.phone }}</a>
+                    </p>
+                    {% if client.additional_phone %}
+                    <p><strong>Доп. телефон:</strong>
+                        <a href="tel:{{ client.additional_phone }}">{{ client.additional_phone }}</a>
+                    </p>
+                    {% endif %}
+                    {% if client.email %}
+                    <p><strong>Email:</strong>
+                        <a href="mailto:{{ client.email }}">{{ client.email }}</a>
+                    </p>
+                    {% endif %}
+                    <p><strong>Тип клиента:</strong>
+                        {% if client.client_type == 'individual' %}
+                        <span class="badge bg-info">Физическое лицо</span>
+                        {% elif client.client_type == 'legal' %}
+                        <span class="badge bg-warning">Юридическое лицо</span>
+                        {% else %}
+                        <span class="badge bg-success">Постоянный клиент</span>
+                        {% endif %}
+                    </p>
+                    {% if client.discount > 0 %}
+                    <p><strong>Скидка:</strong>
+                        <span class="badge bg-danger">{{ client.discount }}%</span>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if client.company_name %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Юридическая информация</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Компания:</strong> {{ client.company_name }}</p>
+                    {% if client.inn %}
+                    <p><strong>ИНН:</strong> {{ client.inn }}</p>
+                    {% endif %}
+                    {% if client.kpp %}
+                    <p><strong>КПП:</strong> {{ client.kpp }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Статистика</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Всего заказов:</strong> {{ orders_stats.total }}</p>
+                    <p><strong>Выполнено:</strong> {{ orders_stats.completed }}</p>
+                    <p><strong>В работе:</strong> {{ orders_stats.in_progress }}</p>
+                    <p><strong>Общая сумма:</strong> {{ orders_stats.total_amount }} ₽</p>
+                    <p><strong>Клиент с:</strong> {{ client.created_at|date:"d.m.Y" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- Автомобили клиента -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Автомобили</h5>
+                    <a href="#" class="btn btn-sm btn-success">
+                        <i class="fas fa-plus"></i> Добавить авто
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if cars %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Марка/Модель</th>
+                                    <th>Госномер</th>
+                                    <th>VIN</th>
+                                    <th>Год</th>
+                                    <th>Пробег</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for car in cars %}
+                                <tr>
+                                    <td><strong>{{ car.brand }} {{ car.model }}</strong></td>
+                                    <td>{{ car.license_plate|default:"—" }}</td>
+                                    <td><small>{{ car.vin|default:"—"|truncatechars:10 }}</small></td>
+                                    <td>{{ car.year|default:"—" }}</td>
+                                    <td>{{ car.mileage }} км</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-wrench"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center mb-0">У клиента пока нет автомобилей</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Заказы клиента -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">История заказов</h5>
+                    <a href="#" class="btn btn-sm btn-primary">
+                        <i class="fas fa-plus"></i> Новый заказ
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if orders %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>№ заказа</th>
+                                    <th>Дата</th>
+                                    <th>Автомобиль</th>
+                                    <th>Статус</th>
+                                    <th>Сумма</th>
+                                    <th>Оплата</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>
+                                        <a href="#">{{ order.order_number }}</a>
+                                    </td>
+                                    <td>{{ order.created_at|date:"d.m.Y" }}</td>
+                                    <td>{{ order.car.brand }} {{ order.car.model }}</td>
+                                    <td>
+                                        {% if order.status == 'completed' %}
+                                        <span class="badge bg-success">Выполнен</span>
+                                        {% elif order.status == 'in_progress' %}
+                                        <span class="badge bg-primary">В работе</span>
+                                        {% elif order.status == 'cancelled' %}
+                                        <span class="badge bg-danger">Отменен</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">{{ order.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ order.total_amount }} ₽</td>
+                                    <td>
+                                        {% if order.payment_status == 'paid' %}
+                                        <span class="badge bg-success">Оплачен</span>
+                                        {% elif order.payment_status == 'partial' %}
+                                        <span class="badge bg-warning">Частично</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Не оплачен</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center mb-0">У клиента пока нет заказов</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- История взаимодействий -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">История взаимодействий</h5>
+                </div>
+                <div class="card-body">
+                    {% if history %}
+                    <div class="timeline">
+                        {% for item in history %}
+                        <div class="mb-3">
+                            <small class="text-muted">{{ item.created_at|date:"d.m.Y H:i" }}</small>
+                            <p class="mb-0">
+                                <strong>{{ item.action }}</strong> - {{ item.description }}
+                                {% if item.order %}
+                                <a href="#">(Заказ №{{ item.order.order_number }})</a>
+                                {% endif %}
+                            </p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center mb-0">История взаимодействий пуста</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

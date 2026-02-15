@@ -125,10 +125,10 @@
               <div class="bg-light rounded p-3 h-100 h-100-inner">
                 <h5 class="mb-3">Категории</h5>
                 <nav class="nav flex-column" aria-label="Боковое меню">
-                  <a class="nav-link active" aria-current="page" href="#">Все услуги</a>
-                  <a class="nav-link" href="#">ТО</a>
-                  <a class="nav-link" href="#">Ремонт</a>
-                  <a class="nav-link" href="#">Запчасти</a>
+                  <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Журнал</a>
+                  <a class="nav-link" href="#">Запись</a>
+                  <a class="nav-link" href="{% url 'client_list' %}">Просмотр</a>
+<!--                  <a class="nav-link" href="#">Запчасти</a>-->
                 </nav>
               </div>
             </div>
@@ -157,7 +157,7 @@
   <!-- Подвал -->
   <footer class="footer">
     <div class="container">
-      <p class="mb-0">&copy; <span id="currentYear"></span> Название сайта. Все права защищены.</p>
+      <p class="mb-0">&copy; <span id="currentYear"></span> Автомастерская. Все права защищены.</p>
       <p class="small mt-2 opacity-75">Контакты: example@email.com | +7 (XXX) XXX-XX-XX</p>
     </div>
   </footer>
