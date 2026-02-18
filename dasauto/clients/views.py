@@ -277,3 +277,43 @@ def client_edit(request, pk):
         'title': f'Редактировать клиента: {client.last_name} {client.first_name}'
     })
 
+
+# from django.shortcuts import render
+# from django.contrib.auth.decorators import login_required
+# from .models import Client, Order  # Предполагается, что модели существуют
+
+@login_required
+def clients_dashboard_view(request):
+    # Начальные данные для статистики
+    orders_today = Order.objects.filter(created_at__date=timezone.now().date()).count()
+    orders_in_progress = Order.objects.filter(status='in_progress').count()
+    top_clients = Client.objects.order_by('-total_orders')[:5]
+    upcoming_appointments = Order.objects.filter(
+        appointment_date__gte=timezone.now()
+    ).order_by('appointment_date')[:5]
+
+    # Поиск клиентов
+    clients = Client.objects.all()
+    last_name = request.GET.get('last_name')
+    phone = request.GET.get('phone')
+    additional_phone = request.GET.get('additional_phone')
+
+    if last_name:
+        clients = clients.filter(last_name__icontains=last_name.strip())
+    if phone:
+        clients = clients.filter(phone__icontains=phone.strip())
+    if additional_phone:
+        clients = clients.filter(additional_phone__icontains=additional_phone.strip())
+
+    # Передаём отфильтрованных клиентов в контекст (если нужно отображать список)
+    # Например: 'search_results': clients[:20] — первые 20 результатов
+
+    context = {
+        'orders_today': orders_today,
+        'orders_in_progress': orders_in_progress,
+        'top_clients': top_clients,
+        'upcoming_appointments': upcoming_appointments,
+        # Раскомментируйте, если нужно показать результаты поиска
+        # 'search_results': clients[:20],
+    }
+    return render(request, 'clients/dashboard.html', context)
