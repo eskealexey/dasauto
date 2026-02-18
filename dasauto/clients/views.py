@@ -1,14 +1,13 @@
 # # Create your views here.
 
 from django.contrib import messages
-from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Count, Sum, Value, DecimalField, IntegerField, F
+from django.core.paginator import Paginator
+from django.db.models import Q, Count, Sum, Value, DecimalField, IntegerField
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse, Http404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from datetime import datetime, timedelta
 
 from .forms import ClientForm
 from .models import Client, Car, Order, ClientHistory
@@ -37,13 +36,13 @@ def client_list(request):
     query = request.GET.get('q')
     if query:
         clients = clients.filter(
-            Q(first_name__icontains=query) |
+            # Q(first_name__icontains=query) |
             Q(last_name__icontains=query) |
-            Q(patronymic__icontains=query) |
+            # Q(patronymic__icontains=query) |
             Q(phone__icontains=query) |
             Q(email__icontains=query) |
-            Q(company_name__icontains=query) |
-            Q(inn__icontains=query)
+            Q(company_name__icontains=query)
+            # Q(inn__icontains=query)
         )
 
     # Фильтры
@@ -151,7 +150,7 @@ def dashboard(request):
             Value(0),
             output_field=DecimalField(max_digits=10, decimal_places=2)
         )
-    ).order_by('-total_sum')[:10]
+    ).order_by('-total_sum')[:5]
 
     # Заказы по статусам
     orders_by_status = Order.objects.filter(
@@ -278,42 +277,31 @@ def client_edit(request, pk):
     })
 
 
-# from django.shortcuts import render
-# from django.contrib.auth.decorators import login_required
-# from .models import Client, Order  # Предполагается, что модели существуют
-
 @login_required
-def clients_dashboard_view(request):
-    # Начальные данные для статистики
-    orders_today = Order.objects.filter(created_at__date=timezone.now().date()).count()
-    orders_in_progress = Order.objects.filter(status='in_progress').count()
-    top_clients = Client.objects.order_by('-total_orders')[:5]
-    upcoming_appointments = Order.objects.filter(
-        appointment_date__gte=timezone.now()
-    ).order_by('appointment_date')[:5]
+def client_found(request):
+    # Базовый queryset
+    clients = Client.objects.filter(
+        is_active=True,
+        created_by=request.user
+    ).select_related('created_by').prefetch_related('cars')
 
-    # Поиск клиентов
-    clients = Client.objects.all()
-    last_name = request.GET.get('last_name')
-    phone = request.GET.get('phone')
-    additional_phone = request.GET.get('additional_phone')
 
-    if last_name:
-        clients = clients.filter(last_name__icontains=last_name.strip())
-    if phone:
-        clients = clients.filter(phone__icontains=phone.strip())
-    if additional_phone:
-        clients = clients.filter(additional_phone__icontains=additional_phone.strip())
+    # Получаем поисковый запрос из GET параметров
+    query = request.GET.get('query', '')  # По умолчанию пустая строка
+    print(f'Search query: {query}')
 
-    # Передаём отфильтрованных клиентов в контекст (если нужно отображать список)
-    # Например: 'search_results': clients[:20] — первые 20 результатов
+    # Применяем фильтрацию, если запрос не пустой
+    if query:
+        # Поиск по имени или телефону (пример)
+        clients = clients.filter(
+            Q(last_name__icontains=query) |
+            Q(phone__icontains=query)
+        )
+        print(f'Filtered clients count: {clients.count()}')
 
     context = {
-        'orders_today': orders_today,
-        'orders_in_progress': orders_in_progress,
-        'top_clients': top_clients,
-        'upcoming_appointments': upcoming_appointments,
-        # Раскомментируйте, если нужно показать результаты поиска
-        # 'search_results': clients[:20],
+        'clients': clients,
+        'search_query': query,  # Передаем запрос в шаблон
     }
-    return render(request, 'clients/dashboard.html', context)
+
+    return render(request, 'clients/client_list.html', context)

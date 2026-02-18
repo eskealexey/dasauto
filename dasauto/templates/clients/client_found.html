@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load client_tags %}
+
+{% block content %}
+ <ul>
+{% for client in clients %}
+    <li>
+        <strong>{{ client.name }}</strong><br>
+        Телефон: {{ client.phone }}<br>
+        Email: {{ client.email }}<br>
+
+        {% if client.cars.exists %}
+            <strong>Автомобили:</strong>
+            <ul>
+            {% for car in client.cars.all %}
+                <li>{{ car.brand }} {{ car.model }} ({{ car.year }})</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% empty %}
+    {% if search_performed %}
+        <li>Ничего не найдено</li>
+    {% else %}
+        <li>Нет активных клиентов</li>
+    {% endif %}
+{% endfor %}
+</ul>
+{% endblock %}

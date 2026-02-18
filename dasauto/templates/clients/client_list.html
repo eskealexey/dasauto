@@ -81,7 +81,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="tel:{{ client.phone }}">{{ client.phone }}</a>
+                                {{ client.phone }}
                                 {% if client.additional_phone %}
                                 <br><small>{{ client.additional_phone }}</small>
                                 {% endif %}
@@ -119,7 +119,7 @@
                             </td>
                             <td>
                                 {% if client.discount > 0 %}
-                                <span class="badge bg-danger">{{ client.discount }}%</span>
+                                <span class="badge bg-danger">{{ client.Discount }}%</span>
                                 {% else %}
                                 <span class="text-muted">—</span>
                                 {% endif %}
